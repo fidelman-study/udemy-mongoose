@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 const Book = require('./Book.model');
 
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 const port = 8080;
 const db = 'mongodb://localhost/udemy-mongoose';
@@ -25,16 +29,40 @@ app.get('/', (req, res) => {
   res.send('Happy to be here');
 });
 
-app.get('/books', (req, res, next) => {
+app.get('/books', (req, res) => {
   console.log('getting all books');
   Book.find({})
     .exec((err, books) => {
       if (err) {
-        console.log('error has occurred');
+        res.send('error has occurred');
       } else {
         res.json(books);
       }
     });
+});
+
+app.get('/books/:id', (req, res) => {
+  const { id } = req.params;
+  console.log('get book by ' + id);
+  Book.findById(id)
+    .exec((err, book) => {
+      if (err) {
+        res.send('error has occurred');
+      } else {
+        res.json(book);
+      }
+    });
+});
+
+app.post('/book', (req, res, next) => {
+  const book = new Book(req.body);
+  book.save((err, book) => {
+    if (err) {
+      res.send('error has occurred');
+    } else {
+      res.json(book);
+    }
+  });
 });
 
 app.listen(port, () => {
