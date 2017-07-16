@@ -7,4 +7,4 @@ const BookSchema = new Schema({
   category: String
 });
 
-module.exports = mongoose.model('Boock', BookSchema);
+module.exports = mongoose.model('Book', BookSchema);
