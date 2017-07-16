@@ -65,6 +65,30 @@ app.post('/book', (req, res, next) => {
   });
 });
 
+app.put('/book/:id', (req, res) => {
+  const { id } = req.params;
+  Book.findByIdAndUpdate(id, req.body)
+    .exec((err, book) => {
+      if (err) {
+        res.send('error has occurred');
+      } else {
+        res.json(book);
+      }
+    });
+});
+
+app.delete('/book/:id', (req, res) => {
+  const { id } = req.params;
+  Book.findByIdAndRemove(id)
+    .exec((err, book) => {
+      if (err) {
+        res.send('error has occurred');
+      } else {
+        res.json(book);
+      }
+    });
+});
+
 app.listen(port, () => {
   console.log('app listening on port ' + port);
 });
